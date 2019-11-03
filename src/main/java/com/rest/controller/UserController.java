@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,12 +30,12 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder builder){
+    public ResponseEntity<Void> createUser(@Valid @RequestBody User user, UriComponentsBuilder builder){
         try {
             userService.createUser(user);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(builder.path("/users/{id}").buildAndExpand(user.getId()).toUri());
-            return new ResponseEntity<Void>(headers,HttpStatus.CREATED);
+            return new ResponseEntity<>(headers,HttpStatus.CREATED);
         }catch (UserExistException ex){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getMessage());
         }
