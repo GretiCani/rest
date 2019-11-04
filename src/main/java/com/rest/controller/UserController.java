@@ -2,6 +2,7 @@ package com.rest.controller;
 
 import com.rest.exception.UserExistException;
 import com.rest.exception.UserNotFoundException;
+import com.rest.exception.UsernameNotFoundException;
 import com.rest.model.User;
 import com.rest.service.UserService;
 import lombok.AllArgsConstructor;
@@ -70,8 +71,11 @@ public class UserController {
     }
 
     @GetMapping("/users/byusername/{username}")
-    public User findByUsername(@PathVariable String username){
-        return userService.findByUsername(username);
+    public User findByUsername(@PathVariable String username)throws UsernameNotFoundException {
+        User user = userService.findByUsername(username);
+        if (user==null)
+            throw new UsernameNotFoundException("Username :"+username+" not found in repository");
+        return user;
     }
 
 }
