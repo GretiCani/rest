@@ -7,13 +7,11 @@ import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.UUID;
 @Entity
 @DynamicUpdate
@@ -40,6 +38,8 @@ public class User {
     private String role;
     @Column(nullable = false, unique = true)
     private String ssn;
+    @OneToMany(mappedBy = "user")
+    List<Orders> orders;
 
     public User(String username, String firstname, String lastname, String email, String role, String ssn) {
         this.username = username;

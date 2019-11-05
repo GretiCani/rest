@@ -15,34 +15,33 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("")
     public List<User> users(){
         return userService.getUsers();
     }
 
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<Void> createUser(@Valid @RequestBody User user, UriComponentsBuilder builder){
         try {
             userService.createUser(user);
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(builder.path("/users/{id}").buildAndExpand(user.getId()).toUri());
+            headers.setLocation(builder.path("/api/users/{id}").buildAndExpand(user.getId()).toUri());
             return new ResponseEntity<>(headers,HttpStatus.CREATED);
         }catch (UserExistException ex){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getMessage());
         }
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public User findById(@PathVariable UUID id) {
         try {
             return userService.findUserById(id);
@@ -52,7 +51,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/{id}")
     public User updateUser(@PathVariable UUID id, @RequestBody User user){
         try {
             return userService.updateUser(id,user);
@@ -61,7 +60,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable UUID id){
         try {
             userService.deleteUser(id);
@@ -70,7 +69,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/byusername/{username}")
+    @GetMapping("/byusername/{username}")
     public User findByUsername(@PathVariable String username)throws UsernameNotFoundException {
         User user = userService.findByUsername(username);
         if (user==null)
