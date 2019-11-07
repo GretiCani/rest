@@ -1,20 +1,20 @@
 package com.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.util.UUID;
 
+
+
 @Entity
 @Data
 @NoArgsConstructor
-public class Orders {
-
+public class Orders extends RepresentationModel {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")
     @Column(columnDefinition = "binary(16)")
